@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
     String user = request.getParameter("login");
     String password = request.getParameter("password");
-    if (!user.isEmpty() && Users.getInstance().getUsers().contains(user) && !password.isEmpty()) {
+    if (!user.isEmpty() && Users.getInstance().getUsers().contains(user) && password != null) {
       HttpSession session = request.getSession();
       session.setAttribute("user", user);
       sendRedirectToHelloPage(response);
