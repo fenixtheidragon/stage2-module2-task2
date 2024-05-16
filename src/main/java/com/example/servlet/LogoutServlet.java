@@ -1,6 +1,5 @@
 package com.example.servlet;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +16,8 @@ public class LogoutServlet extends HttpServlet {
       session.removeAttribute("user");
       session.invalidate();
       try {
-        request.getRequestDispatcher(loginPage).forward(request,response);
-      } catch (ServletException|IOException e) {
+        response.sendRedirect(loginPage);
+      } catch (IOException e) {
         e.printStackTrace();
       }
     }
