@@ -18,11 +18,11 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) {
-    HttpSession session = request.getSession(false);
-    if (session == null || session.getAttribute("user") == null) {
-      forwardToLoginPage(request,response);
-    } else {
+    HttpSession session = request.getSession();
+    if (session.getAttribute("user") != null) {
       sendRedirectToHelloPage(response);
+    } else {
+      forwardToLoginPage(request,response);
     }
   }
 
