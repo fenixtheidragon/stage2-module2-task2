@@ -2,6 +2,7 @@ package com.example.servlet;
 
 import com.example.Users;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,34 +19,38 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) {
     HttpSession session = request.getSession();
-    String result;
     if (session.getAttribute("user") == null) {
-      result = loginPage;
+      forwardToLoginPage(request,response);
     } else {
-      result = helloPage;
+      sendRedirectToHelloPage(response);
     }
-    sendRedirect(response, result);
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
     String user = request.getParameter("login");
     String password = request.getParameter("password");
-    String result;
     if (Users.getInstance().getUsers().contains(user) && !password.isEmpty()) {
       HttpSession session = request.getSession();
       session.setAttribute("user", user);
-      result = helloPage;
+      sendRedirectToHelloPage(response);
     } else {
-      result = loginPage;
+      forwardToLoginPage(request,response);
     }
-    sendRedirect(response, result);
   }
 
-  private void sendRedirect(HttpServletResponse response, String result) {
+  private void sendRedirectToHelloPage(HttpServletResponse response) {
     try {
-      response.sendRedirect(result);
+      response.sendRedirect(helloPage);
     } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void forwardToLoginPage(HttpServletRequest request, HttpServletResponse response) {
+    try {
+      request.getRequestDispatcher(loginPage).forward(request, response);
+    } catch (ServletException | IOException e) {
       e.printStackTrace();
     }
   }
